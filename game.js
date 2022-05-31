@@ -25,11 +25,21 @@ let ties = 0;
 
 /***************************** HELPER FUNCTIONS ******************************/
 function printHelp() {
-  // Your code here
+  for (move in VALID_MOVES) {
+    console.log(`  Type '${move}' for ${VALID_MOVES[move].name}`);
+  }
+  console.log("  Type 'q' to quit");
+  console.log("  Type 'h' for a list of valid commands\n");
 }
 
 function getWinner(move1, move2) {
-  // Your code here
+  if (VALID_MOVES[move1].winsAgainst === move2) {
+    return 1;
+  } else if (move1 === move2) {
+    return 0;
+  } else {
+    return -1;
+  }
 }
 
 function getCPUMove() {
@@ -48,11 +58,7 @@ function promptInput(rl) {
 
     if (cmd === "h") {
       console.log("\nHelp:\n");
-      console.log("  Type 'r' for Rock");
-      console.log("  Type 'p' for Paper");
-      console.log("  Type 's' for Scissors");
-      console.log("  Type 'q' to quit");
-      console.log("  Type 'h' for a list of valid commands\n");
+      printHelp();
     } else if (cmd === "q") {
       rl.close();
       return;
@@ -63,11 +69,11 @@ function promptInput(rl) {
 
       console.log(`You pick ${cmd}, computer picks ${cpu}.`);
 
-      if (cmd === cpu) {
+      if (!getWinner(cmd, cpu)) {
         // tie
         console.log("You tie.\n");
         ties++;
-      } else if (VALID_MOVES[cmd].winsAgainst === cpu) {
+      } else if (getWinner(cmd, cpu) > 1) {
         // win
         console.log("You win!\n");
         wins++;
